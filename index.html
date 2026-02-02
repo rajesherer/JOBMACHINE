@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talent Tree Job Apply Engine - Deploy Helper</title>
+  <style>
+    /* === PERPLEXITY DESIGN SYSTEM (from instructions) === */
+    :root {
+      /* Primitive Color Tokens */
+      --color-white: rgba(255, 255, 255, 1);
+      --color-black: rgba(0, 0, 0, 1);
+      --color-cream-50: rgba(252, 252, 249, 1);
+      --color-cream-100: rgba(255, 255, 253, 1);
+      --color-gray-200: rgba(245, 245, 245, 1);
+      --color-gray-300: rgba(167, 169, 169, 1);
+      --color-gray-400: rgba(119, 124, 124, 1);
+      --color-slate-500: rgba(98, 108, 113, 1);
+      --color-brown-600: rgba(94, 82, 64, 1);
+      --color-charcoal-700: rgba(31, 33, 33, 1);
+      --color-charcoal-800: rgba(38, 40, 40, 1);
+      --color-slate-900: rgba(19, 52, 59, 1);
+      --color-teal-300: rgba(50, 184, 198, 1);
+      --color-teal-400: rgba(45, 166, 178, 1);
+      --color-teal-500: rgba(33, 128, 141, 1);
+      --color-teal-600: rgba(29, 116, 128, 1);
+      --color-teal-700: rgba(26, 104, 115, 1);
+      --color-teal-800: rgba(41, 150, 161, 1);
+      --color-red-400: rgba(255, 84, 89, 1);
+      --color-red-500: rgba(192, 21, 47, 1);
+      --color-orange-400: rgba(230, 129, 97, 1);
+      --color-orange-500: rgba(168, 75, 47, 1);
+
+      /* RGB versions for opacity control */
+      --color-brown-600-rgb: 94, 82, 64;
+      --color-teal-500-rgb: 33, 128, 141;
+      --color-slate-900-rgb: 19, 52, 59;
+      --color-slate-500-rgb: 98, 108, 113;
+      --color-red-500-rgb: 192, 21, 47;
+      --color-red-400-rgb: 255, 84, 89;
+      --color-orange-500-rgb: 168, 75, 47;
+      --color-orange-400-rgb: 230, 129, 97;
+
+      /* Background color tokens (Light Mode) */
+      --color-bg-1: rgba(59, 130, 246, 0.08);
+      --color-bg-2: rgba(245, 158, 11, 0.08);
+      --color-bg-3: rgba(34, 197, 94, 0.08);
+      --color-bg-4: rgba(239, 68, 68, 0.08);
+      --color-bg-5: rgba(147, 51, 234, 0.08);
+      --color-bg-6: rgba(249, 115, 22, 0.08);
+      --color-bg-7: rgba(236, 72, 153, 0.08);
+      --color-bg-8: rgba(6, 182, 212, 0.08);
+
+      /* Semantic Color Tokens (Light Mode) */
+      --color-background: var(--color-cream-50);
+      --color-surface: var(--color-cream-100);
+      --color-text: var(--color-slate-900);
+      --color-text-secondary: var(--color-slate-500);
+      --color-primary: var(--color-teal-500);
+      --color-primary-hover: var(--color-teal-600);
+      --color-primary-active: var(--color-teal-700);
+      --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+      --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-btn-primary-text: var(--color-cream-50);
+      --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-error: var(--color-red-500);
+      --color-success: var(--color-teal-500);
+      --color-warning: var(--color-orange-500);
+      --color-info: var(--color-slate-500);
+      --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+      --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+      /* RGB versions for opacity control */
+      --color-success-rgb: 33, 128, 141;
+      --color-error-rgb: 192, 21, 47;
+      --color-warning-rgb: 168, 75, 47;
+      --color-info-rgb: 98, 108, 113;
+
+      /* Typography */
+      --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+        Monaco, Consolas, monospace;
+      --font-size-xs: 11px;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-md: 14px;
+      --font-size-lg: 16px;
+      --font-size-xl: 18px;
+      --font-size-2xl: 20px;
+      --font-size-3xl: 24px;
+      --font-size-4xl: 30px;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 550;
+      --font-weight-bold: 600;
+      --line-height-tight: 1.2;
+      --line-height-normal: 1.5;
+      --letter-spacing-tight: -0.01em;
+
+      /* Spacing */
+      --space-0: 0;
+      --space-1: 1px;
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-6: 6px;
+      --space-8: 8px;
+      --space-10: 10px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-base: 8px;
+      --radius-md: 10px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+        0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+      /* Animation */
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Layout */
+      --container-sm: 640px;
+      --container-md: 768px;
+      --container-lg: 1024px;
+      --container-xl: 1280px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-gray-400-rgb: 119, 124, 124;
+        --color-teal-300-rgb: 50, 184, 198;
+        --color-gray-300-rgb: 167, 169, 169;
+        --color-gray-200-rgb: 245, 245, 245;
+
+        --color-bg-1: rgba(29, 78, 216, 0.15);
+        --color-bg-2: rgba(180, 83, 9, 0.15);
+        --color-bg-3: rgba(21, 128, 61, 0.15);
+        --color-bg-4: rgba(185, 28, 28, 0.15);
+        --color-bg-5: rgba(107, 33, 168, 0.15);
+        --color-bg-6: rgba(194, 65, 12, 0.15);
+        --color-bg-7: rgba(190, 24, 93, 0.15);
+        --color-bg-8: rgba(8, 145, 178, 0.15);
+
+        --color-background: var(--color-charcoal-700);
+        --color-surface: var(--color-charcoal-800);
+        --color-text: var(--color-gray-200);
+        --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+        --color-primary: var(--color-teal-300);
+        --color-primary-hover: var(--color-teal-400);
+        --color-primary-active: var(--color-teal-800);
+        --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+        --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+        --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+        --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+        --color-error: var(--color-red-400);
+        --color-success: var(--color-teal-300);
+        --color-warning: var(--color-orange-400);
+        --color-info: var(--color-gray-300);
+        --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+        --color-btn-primary-text: var(--color-slate-900);
+        --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+        --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+        --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+        --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+        --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+        --focus-ring: 0 0 0 3px var(--color-focus-ring);
+        --focus-outline: 2px solid var(--color-primary);
+        --status-bg-opacity: 0.15;
+        --status-border-opacity: 0.25;
+        --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+        --color-success-rgb: var(--color-teal-300-rgb);
+        --color-error-rgb: var(--color-red-400-rgb);
+        --color-warning-rgb: var(--color-orange-400-rgb);
+        --color-info-rgb: var(--color-gray-300-rgb);
+      }
+    }
+
+    [data-color-scheme="dark"] {
+      --color-gray-400-rgb: 119, 124, 124;
+      --color-teal-300-rgb: 50, 184, 198;
+      --color-gray-300-rgb: 167, 169, 169;
+      --color-gray-200-rgb: 245, 245, 245;
+
+      --color-bg-1: rgba(29, 78, 216, 0.15);
+      --color-bg-2: rgba(180, 83, 9, 0.15);
+      --color-bg-3: rgba(21, 128, 61, 0.15);
+      --color-bg-4: rgba(185, 28, 28, 0.15);
+      --color-bg-5: rgba(107, 33, 168, 0.15);
+      --color-bg-6: rgba(194, 65, 12, 0.15);
+      --color-bg-7: rgba(190, 24, 93, 0.15);
+      --color-bg-8: rgba(8, 145, 178, 0.15);
+
+      --color-background: var(--color-charcoal-700);
+      --color-surface: var(--color-charcoal-800);
+      --color-text: var(--color-gray-200);
+      --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+      --color-primary: var(--color-teal-300);
+      --color-primary-hover: var(--color-teal-400);
+      --color-primary-active: var(--color-teal-800);
+      --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+      --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+      --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+      --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+      --color-error: var(--color-red-400);
+      --color-success: var(--color-teal-300);
+      --color-warning: var(--color-orange-400);
+      --color-info: var(--color-gray-300);
+      --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+      --color-btn-primary-text: var(--color-slate-900);
+      --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+      --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+      --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+      --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+      --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+      --focus-ring: 0 0 0 3px var(--color-focus-ring);
+      --focus-outline: 2px solid var(--color-primary);
+      --status-bg-opacity: 0.15;
+      --status-border-opacity: 0.25;
+      --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+      --color-success-rgb: var(--color-teal-300-rgb);
+      --color-error-rgb: var(--color-red-400-rgb);
+      --color-warning-rgb: var(--color-orange-400-rgb);
+      --color-info-rgb: var(--color-gray-300-rgb);
+    }
+
+    [data-color-scheme="light"] {
+      --color-brown-600-rgb: 94, 82, 64;
+      --color-teal-500-rgb: 33, 128, 141;
+      --color-slate-900-rgb: 19, 52, 59;
+
+      --color-background: var(--color-cream-50);
+      --color-surface: var(--color-cream-100);
+      --color-text: var(--color-slate-900);
+      --color-text-secondary: var(--color-slate-500);
+      --color-primary: var(--color-teal-500);
+      --color-primary-hover: var(--color-teal-600);
+      --color-primary-active: var(--color-teal-700);
+      --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+      --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-btn-primary-text: var(--color-cream-50);
+      --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-error: var(--color-red-500);
+      --color-success: var(--color-teal-500);
+      --color-warning: var(--color-orange-500);
+      --color-info: var(--color-slate-500);
+      --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+      --color-success-rgb: var(--color-teal-500-rgb);
+      --color-error-rgb: var(--color-red-500-rgb);
+      --color-warning-rgb: var(--color-orange-500-rgb);
+      --color-info-rgb: var(--color-slate-500-rgb);
+    }
+
+    html {
+      font-size: var(--font-size-base);
+      font-family: var(--font-family-base);
+      line-height: var(--line-height-normal);
+      color: var(--color-text);
+      background-color: var(--color-background);
+      -webkit-font-smoothing: antialiased;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, rgba(33,128,141,0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(94,82,64,0.18), transparent 55%),
+                  var(--color-background);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      margin: 0;
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text);
+      letter-spacing: var(--letter-spacing-tight);
+    }
+    h1 { font-size: var(--font-size-4xl); }
+    h2 { font-size: var(--font-size-3xl); }
+    h3 { font-size: var(--font-size-2xl); }
+    h4 { font-size: var(--font-size-xl); }
+
+    p { margin: 0 0 var(--space-12) 0; }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-standard);
+    }
+    a:hover { color: var(--color-primary-hover); }
+
+    code {
+      font-family: var(--font-family-mono);
+      font-size: 12px;
+      background-color: var(--color-secondary);
+      padding: 2px 4px;
+      border-radius: var(--radius-sm);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-lg);
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background-color: var(--color-surface);
+      border-radius: 16px;
+      border: 1px solid var(--color-card-border);
+      box-shadow: var(--shadow-md);
+      padding: 20px 20px 18px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-8);
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-xs);
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: var(--color-bg-1);
+      color: var(--color-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-standard);
+      background: var(--color-primary);
+      color: var(--color-btn-primary-text);
+    }
+    .btn:hover { background: var(--color-primary-hover); }
+    .btn:active { background: var(--color-primary-active); }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-focus-ring);
+    }
+
+    .btn-secondary {
+      background: var(--color-secondary);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+    .btn-secondary:hover { background: var(--color-secondary-hover); }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      padding: 4px;
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-standard),
+                  border-color var(--duration-fast) var(--ease-standard);
+    }
+    .btn-icon:hover {
+      background: var(--color-secondary);
+      border-color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: var(--space-12);
+    }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      margin-bottom: 4px;
+      color: var(--color-text-secondary);
+    }
+
+    .field-input, .field-textarea {
+      width: 100%;
+      border-radius: var(--radius-base);
+      border: 1px solid var(--color-border);
+      padding: 8px 10px;
+      font-family: var(--font-family-mono);
+      font-size: 12px;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      transition: border-color var(--duration-fast) var(--ease-standard),
+                  box-shadow var(--duration-fast) var(--ease-standard),
+                  background-color var(--duration-fast) var(--ease-standard);
+    }
+
+    .field-input:focus,
+    .field-textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(var(--color-teal-500-rgb),0.25);
+      background-color: var(--color-background);
+    }
+
+    .field-textarea {
+      min-height: 260px;
+      resize: vertical;
+      white-space: pre;
+    }
+
+    .field-input.small {
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-sm);
+    }
+
+    .hint {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--font-size-xs);
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-top: 6px;
+    }
+    .status-ok {
+      background: rgba(var(--color-success-rgb), 0.14);
+      color: var(--color-success);
+      border: 1px solid rgba(var(--color-success-rgb),0.3);
+    }
+    .status-warn {
+      background: rgba(var(--color-warning-rgb), 0.14);
+      color: var(--color-warning);
+      border: 1px solid rgba(var(--color-warning-rgb),0.3);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .pill {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px dashed rgba(var(--color-brown-600-rgb),0.5);
+      color: var(--color-text-secondary);
+      background: rgba(255,255,255,0.7);
+    }
+
+    .steps {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0 0;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    .steps li {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+      align-items: flex-start;
+    }
+    .steps .step-index {
+      width: 16px;
+      text-align: right;
+      font-family: var(--font-family-mono);
+      color: var(--color-primary);
+    }
+
+    .tagline {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+    }
+
+    .script-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .mono-preview {
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      background: rgba(0,0,0,0.03);
+      border-radius: var(--radius-base);
+      padding: 10px;
+      border: 1px dashed rgba(var(--color-brown-600-rgb),0.3);
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--color-text-secondary);
+      margin-top: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (max-width: 700px) {
+      .grid-2 {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .small-label {
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-secondary);
+    }
+
+    .divider {
+      height: 1px;
+      border-bottom: 1px dashed rgba(var(--color-brown-600-rgb),0.25);
+      margin: 10px 0 12px;
+    }
+
+    .inline-code {
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      padding: 2px 4px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 4px;
+    }
+
+    .danger-note {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: var(--radius-base);
+      border: 1px solid rgba(var(--color-error-rgb),0.4);
+      background: rgba(var(--color-error-rgb),0.08);
+      font-size: var(--font-size-xs);
+      color: var(--color-error);
+    }
+
+    .env-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(var(--color-brown-600-rgb),0.25);
+    }
+    .env-key {
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      color: var(--color-text);
+    }
+    .env-value {
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 180px;
+      text-align: right;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+
+    .status-light {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--color-warning);
+      box-shadow: 0 0 0 3px rgba(var(--color-warning-rgb),0.3);
+    }
+    .status-light.ok {
+      background: var(--color-success);
+      box-shadow: 0 0 0 3px rgba(var(--color-success-rgb),0.28);
+    }
+
+    @font-face {
+      font-family: 'FKGroteskNeue';
+      src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+        format('woff2');
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header style="margin-bottom: 18px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div>
+          <h1 style="display:flex;align-items:center;gap:8px;">
+            Talent Tree Job Apply Engine
+          </h1>
+          <p class="tagline">
+            One-click deployment script generator for your FastAPI + PostgreSQL job engine on AWS Ubuntu/Lightsail.
+          </p>
+        </div>
+        <button class="btn-secondary" type="button" id="themeToggle" aria-label="Toggle dark/light">
+          Toggle theme
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: CONFIG FORM -->
+      <section class="card" aria-label="Deployment configuration">
+        <div class="card-header">
+          <div>
+            <div class="badge">
+              <span>CONFIGURATOR</span>
+            </div>
+            <h2 style="margin-top:6px;">Deployment Settings</h2>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>Git Repository URL</span>
+            <span class="hint">Public HTTPS URL of job-apply-engine repo</span>
+          </div>
+          <input
+            id="repoUrl"
+            class="field-input small"
+            type="text"
+            placeholder="https://github.com/your-org/job-apply-engine.git"
+          />
+        </div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">
+              <span>Server SSH User</span>
+            </div>
+            <input
+              id="sshUser"
+              class="field-input small"
+              type="text"
+              value="ubuntu"
+            />
+            <div class="hint">For Lightsail/EC2 Ubuntu images, <span class="inline-code">ubuntu</span> is default.</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">
+              <span>Backend Port</span>
+            </div>
+            <input
+              id="backendPort"
+              class="field-input small"
+              type="number"
+              min="1"
+              max="65535"
+              value="8000"
+            />
+            <div class="hint">FastAPI /docs will be exposed on this port.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>Database Name</span>
+          </div>
+          <input
+            id="dbName"
+            class="field-input small"
+            type="text"
+            value="jobs"
+          />
+        </div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">
+              <span>DB User</span>
+            </div>
+            <input
+              id="dbUser"
+              class="field-input small"
+              type="text"
+              value="postgres"
+            />
+          </div>
+          <div class="field-group">
+            <div class="field-label">
+              <span>DB Password</span>
+            </div>
+            <input
+              id="dbPassword"
+              class="field-input small"
+              type="password"
+              value="postgres"
+            />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>JWT Secret</span>
+          </div>
+          <input
+            id="jwtSecret"
+            class="field-input small"
+            type="text"
+            value="TTS_SECRET_KEY"
+          />
+          <div class="hint">Use a long random string in production.</div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>Notification Email (From)</span>
+          </div>
+          <input
+            id="emailUser"
+            class="field-input small"
+            type="email"
+            placeholder="your-email@gmail.com"
+          />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>Email App Password</span>
+          </div>
+          <input
+            id="emailPassword"
+            class="field-input small"
+            type="password"
+            placeholder="App password (not login password)"
+          />
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>Docker Compose File Path</span>
+          </div>
+          <input
+            id="composePath"
+            class="field-input small"
+            type="text"
+            value="docker-compose.yml"
+          />
+          <div class="hint">Relative to repo root. Update if you keep it elsewhere.</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+          <div class="status status-warn" id="formStatus">
+            <span class="status-light" id="statusLight"></span>
+            <span id="statusText">Fill repo URL, email, and password to unlock deploy script.</span>
+          </div>
+          <button class="btn" type="button" id="generateBtn">
+            Generate Script
+          </button>
+        </div>
+
+        <div class="pill-row">
+          <span class="pill">Ubuntu / Lightsail ready</span>
+          <span class="pill">Idempotent: re-runnable safely</span>
+          <span class="pill">FastAPI + PostgreSQL via Docker</span>
+        </div>
+
+        <div class="danger-note">
+          Do not hardcode production secrets in Git. This app only generates a local
+          <span class="inline-code">deploy_job_engine.sh</span> and
+          <span class="inline-code">.env</span> for you to copy over SSH.
+        </div>
+      </section>
+
+      <!-- RIGHT: GENERATED SCRIPTS + HOW-TO -->
+      <section class="card" aria-label="Generated deployment script">
+        <div class="script-header">
+          <div>
+            <div class="small-label">OUTPUT</div>
+            <h3 style="margin-top:2px;">deploy_job_engine.sh</h3>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-icon" type="button" id="copyScriptBtn" title="Copy script">
+              <span style="font-size:12px;">⧉</span>
+            </button>
+            <button class="btn-icon" type="button" id="downloadScriptBtn" title="Download script">
+              <span style="font-size:13px;">⬇</span>
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          id="scriptOutput"
+          class="field-textarea"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="divider"></div>
+
+        <div class="script-header">
+          <div>
+            <div class="small-label">ENV PREVIEW</div>
+            <h4 style="margin-top:2px;font-size:var(--font-size-md);">backend/app/.env</h4>
+          </div>
+          <button class="btn-icon" type="button" id="copyEnvBtn" title="Copy .env">
+            <span style="font-size:12px;">⧉</span>
+          </button>
+        </div>
+
+        <div class="mono-preview" id="envPreview"></div>
+
+        <div class="divider"></div>
+
+        <div>
+          <div class="small-label">HOW TO USE</div>
+          <ul class="steps">
+            <li>
+              <span class="step-index">1.</span>
+              <span>Generate the script above and save it as <span class="inline-code">deploy_job_engine.sh</span> on your laptop.</span>
+            </li>
+            <li>
+              <span class="step-index">2.</span>
+              <span>SSH into your AWS / Lightsail Ubuntu server:<br/>
+                <span class="inline-code">ssh ubuntu@&lt;your-server-ip&gt;</span>
+              </span>
+            </li>
+            <li>
+              <span class="step-index">3.</span>
+              <span>Upload the script:<br/>
+                <span class="inline-code">scp deploy_job_engine.sh ubuntu@&lt;your-server-ip&gt;:~/</span>
+              </span>
+            </li>
+            <li>
+              <span class="step-index">4.</span>
+              <span>Make it executable and run:<br/>
+                <span class="inline-code">chmod +x deploy_job_engine.sh && ./deploy_job_engine.sh</span>
+              </span>
+            </li>
+            <li>
+              <span class="step-index">5.</span>
+              <span>Wait for Docker to build and start containers. Then open:<br/>
+                <span class="inline-code">http://&lt;server-ip&gt;:<span id="howtoPort">8000</span>/docs</span>
+                to see FastAPI docs.</span>
+            </li>
+          </ul>
+
+          <div class="footer-note">
+            Next for students: load the Chrome extension, register via <span class="inline-code">/auth/register</span>,
+            score/apply jobs, and track via <span class="inline-code">/dashboard/applications</span>.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      const repoUrlInput = document.getElementById('repoUrl');
+      const sshUserInput = document.getElementById('sshUser');
+      const backendPortInput = document.getElementById('backendPort');
+      const dbNameInput = document.getElementById('dbName');
+      const dbUserInput = document.getElementById('dbUser');
+      const dbPasswordInput = document.getElementById('dbPassword');
+      const jwtSecretInput = document.getElementById('jwtSecret');
+      const emailUserInput = document.getElementById('emailUser');
+      const emailPasswordInput = document.getElementById('emailPassword');
+      const composePathInput = document.getElementById('composePath');
+
+      const formStatus = document.getElementById('formStatus');
+      const statusLight = document.getElementById('statusLight');
+      const statusText = document.getElementById('statusText');
+
+      const scriptOutput = document.getElementById('scriptOutput');
+      const envPreview = document.getElementById('envPreview');
+      const generateBtn = document.getElementById('generateBtn');
+      const copyScriptBtn = document.getElementById('copyScriptBtn');
+      const copyEnvBtn = document.getElementById('copyEnvBtn');
+      const downloadScriptBtn = document.getElementById('downloadScriptBtn');
+      const howtoPort = document.getElementById('howtoPort');
+
+      function sanitizeRepoUrl(url) {
+        return url.trim();
+      }
+
+      function isFormReady() {
+        return (
+          sanitizeRepoUrl(repoUrlInput.value) &&
+          emailUserInput.value.trim() &&
+          emailPasswordInput.value.trim()
+        );
+      }
+
+      function updateStatus() {
+        if (isFormReady()) {
+          formStatus.classList.remove('status-warn');
+          formStatus.classList.add('status-ok');
+          statusLight.classList.add('ok');
+          statusText.textContent = 'Good to go. Generate the script and deploy on your Ubuntu server.';
+        } else {
+          formStatus.classList.remove('status-ok');
+          formStatus.classList.add('status-warn');
+          statusLight.classList.remove('ok');
+          statusText.textContent = 'Fill repo URL, email, and password to unlock deploy script.';
+        }
+      }
+
+      function buildEnvContent() {
+        const dbName = dbNameInput.value || 'jobs';
+        const dbUser = dbUserInput.value || 'postgres';
+        const dbPass = dbPasswordInput.value || 'postgres';
+        const jwtSecret = jwtSecretInput.value || 'TTS_SECRET_KEY';
+        const emailUser = emailUserInput.value || 'your-email@gmail.com';
+        const emailApp = emailPasswordInput.value || 'your-app-password';
+
+        const dbUrl = `postgresql://${dbUser}:${dbPass}@db:5432/${dbName}`;
+
+        return [
+          `DATABASE_URL=${dbUrl}`,
+          `JWT_SECRET=${jwtSecret}`,
+          `EMAIL_USER=${emailUser}`,
+          `EMAIL_APP_PASSWORD=${emailApp}`
+        ].join('\n');
+      }
+
+      function buildScript() {
+        const repo = sanitizeRepoUrl(repoUrlInput.value) || 'https://github.com/<your-repo>/job-apply-engine.git';
+        const sshUser = sshUserInput.value || 'ubuntu';
+        const port = backendPortInput.value || '8000';
+        const composePath = composePathInput.value || 'docker-compose.yml';
+
+        howtoPort.textContent = String(port);
+
+        const scriptLines = [
+'#!/bin/bash',
+'# ---------------------------------------------',
+'# Talent Tree Solutions - Job Apply Engine Deployment',
+'# Fully automated, idempotent deploy script for Ubuntu / Lightsail',
+'# ---------------------------------------------',
+'',
+'set -e',
+'',
+'echo "==> Starting Talent Tree Job Apply Engine deployment..."',
+'',
+'# 1) Basic sanity check',
+'if ! command -v sudo >/dev/null 2>&1; then',
+'  echo "sudo command not found. Please run this on an Ubuntu-like system with sudo available."',
+'  exit 1',
+'fi',
+'',
+'echo "==> Updating system packages (safe to re-run)..."',
+'sudo apt-get update -y',
+'sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y',
+'',
+'echo "==> Installing Docker + docker-compose + git + curl + unzip (if missing)..."',
+'sudo apt-get install -y docker.io docker-compose git curl unzip',
+'',
+'echo "==> Enabling and starting Docker service..."',
+'sudo systemctl enable docker || true',
+'sudo systemctl start docker || true',
+'',
+'APP_DIR="$HOME/job-apply-engine"',
+'REPO_URL="' + repo.replace(/"/g, '\\"') + '"',
+'COMPOSE_FILE="' + composePath.replace(/"/g, '\\"') + '"',
+'',
+'echo "==> Cloning or updating repository at $APP_DIR"',
+'if [ ! -d "$APP_DIR" ]; then',
+'  git clone "$REPO_URL" "$APP_DIR"',
+'else',
+'  cd "$APP_DIR"',
+'  # If this fails (no remote), deployment still continues with existing code',
+'  git pull || echo "Warning: git pull failed, using existing codebase."' ,
+'fi',
+'',
+'cd "$APP_DIR"',
+'',
+'echo "==> Ensuring backend/app/.env exists..."',
+'mkdir -p backend/app',
+'ENV_FILE="backend/app/.env"',
+'if [ ! -f "$ENV_FILE" ]; then',
+'  cat <<\'EOL\' > "$ENV_FILE"',
+buildEnvContent(),
+'EOL',
+'  echo "Created $ENV_FILE with default values. Update secrets if needed."',
+'else',
+'  echo "$ENV_FILE already exists. Leaving as-is."',
+'fi',
+'',
+'echo "==> Bringing down any existing containers..."',
+'sudo docker-compose -f "$COMPOSE_FILE" down || true',
+'',
+'echo "==> Building and starting containers in detached mode..."',
+'sudo docker-compose -f "$COMPOSE_FILE" up -d --build',
+'',
+'echo "==> Waiting 10 seconds for containers to stabilize..."',
+'sleep 10',
+'',
+'echo "==> Currently running containers:"',
+'sudo docker ps',
+'',
+'SERVER_IP=$(curl -s ifconfig.me || echo "your-server-ip")',
+'',
+'echo ""',
+'echo "---------------------------------------------"',
+'echo " Deployment complete!"',
+'echo " FastAPI docs (Job Apply Engine API):"',
+'echo "   http://$SERVER_IP:' + port + '/docs"',
+'echo ""',
+'echo " Next steps for students:"',
+'echo "   1) Load the Chrome extension from chrome-extension/ (in this repo)"',
+'echo "   2) Register via /auth/register"',
+'echo "   3) Collect jobs → Score → Apply via email or extension"',
+'echo "   4) Track applications at /dashboard/applications"',
+'echo "---------------------------------------------"',
+'',
+'echo "Done."',
+''
+        ];
+
+        return scriptLines.join('\n');
+      }
+
+      function renderEnvPreview() {
+        const envText = buildEnvContent();
+        envPreview.textContent = envText;
+
+        const dbName = dbNameInput.value || 'jobs';
+        const dbUser = dbUserInput.value || 'postgres';
+        const jwtSecret = jwtSecretInput.value || 'TTS_SECRET_KEY';
+
+        const lines = envText.split('\n');
+        const meta = [
+          { key: 'DB User', value: dbUser },
+          { key: 'DB Name', value: dbName },
+          { key: 'JWT Secret', value: jwtSecret.length > 12 ? jwtSecret.slice(0,12) + '…' : jwtSecret }
+        ];
+
+        let metaHtml = '';
+        meta.forEach(item => {
+          metaHtml += `
+<div class="env-line">
+  <div class="env-key">${item.key}</div>
+  <div class="env-value">${item.value}</div>
+</div>`;
+        });
+
+        envPreview.innerHTML = [
+          `<pre style="margin:0;white-space:pre-wrap;">${lines.join('\n')}</pre>`,
+          '<div style="margin-top:8px;">',
+          metaHtml,
+          '</div>'
+        ].join('');
+      }
+
+      function handleGenerate() {
+        const script = buildScript();
+        scriptOutput.value = script;
+        renderEnvPreview();
+        updateStatus();
+      }
+
+      function copyToClipboard(text, label) {
+        if (!navigator.clipboard) {
+          alert('Clipboard API not available in this browser.');
+          return;
+        }
+        navigator.clipboard.writeText(text).then(
+          () => {
+            alert(label + ' copied to clipboard.');
+          },
+          () => {
+            alert('Failed to copy ' + label + '.');
+          }
+        );
+      }
+
+      function handleCopyScript() {
+        const text = scriptOutput.value.trim();
+        if (!text) {
+          alert('Generate the script first.');
+          return;
+        }
+        copyToClipboard(text, 'deploy_job_engine.sh');
+      }
+
+      function handleCopyEnv() {
+        const text = buildEnvContent();
+        copyToClipboard(text, '.env');
+      }
+
+      function handleDownloadScript() {
+        const text = scriptOutput.value.trim();
+        if (!text) {
+          alert('Generate the script first.');
+          return;
+        }
+        const blob = new Blob([text], { type: 'text/x-shellscript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'deploy_job_engine.sh';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      function initThemeToggle() {
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+
+        function currentScheme() {
+          return document.documentElement.getAttribute('data-color-scheme') || 'light';
+        }
+
+        function toggleScheme() {
+          const now = currentScheme();
+          const next = now === 'light' ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-color-scheme', next);
+        }
+
+        btn.addEventListener('click', toggleScheme);
+      }
+
+      [repoUrlInput, sshUserInput, backendPortInput, dbNameInput,
+       dbUserInput, dbPasswordInput, jwtSecretInput, emailUserInput,
+       emailPasswordInput, composePathInput].forEach(el => {
+        el.addEventListener('input', () => {
+          updateStatus();
+          if (scriptOutput.value.trim()) {
+            scriptOutput.value = buildScript();
+            renderEnvPreview();
+          }
+        });
+      });
+
+      generateBtn.addEventListener('click', handleGenerate);
+      copyScriptBtn.addEventListener('click', handleCopyScript);
+      copyEnvBtn.addEventListener('click', handleCopyEnv);
+      downloadScriptBtn.addEventListener('click', handleDownloadScript);
+
+      renderEnvPreview();
+      updateStatus();
+      initThemeToggle();
+      scriptOutput.placeholder = [
+        '# Click "Generate Script" on the left once you fill all required fields.',
+        '# This will output a production-ready deploy_job_engine.sh script',
+        '# optimized for Ubuntu / Lightsail with Docker, docker-compose and FastAPI.'
+      ].join('\n');
+    })();
+  </script>
+</body>
+</html>
